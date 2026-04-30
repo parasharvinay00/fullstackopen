@@ -8,7 +8,7 @@ import './App.css'
 const App = () => {
   return (
     <div>
-      <p>this is evolution</p>
+      <p>shri ganeshay namah</p>
     </div>
   )
 }

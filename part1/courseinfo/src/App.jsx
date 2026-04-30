@@ -6,6 +6,7 @@ import './App.css'
 
 
 const App = () => {
+  console.log
   return (
     <div>
       <p>shri ganeshay namah</p>

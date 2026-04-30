@@ -6,10 +6,10 @@ import './App.css'
 
 
 const App = () => {
-  comsole.log('Om gam ganapataye namah')
+  comsole.log('Hello from component')
   return (
     <div>
-      <p>Shri ganeshay namah</p>
+      <p>Hello world</p>
     </div>
   )
 }

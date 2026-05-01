@@ -1,20 +1,31 @@
 import './App.css'
 
+
+
 const Hello = (props) => {
+
+  console.log(props)
   return (
     <div>
+      <p>
 
-      <p>Hello {props.name}</p>
+        Hello {props.name}, you are {props.age} years old
+      </p>
     </div>
   )
 }
+
 const App = () => {
+
+  const name = 'Sahil'
+  const age = 28
+
   return (
     <div>
       <h1>Greetings</h1>
 
-      <Hello name='Sahil' />
-      <Hello name='Vinay' />
+      <Hello name='Vinay' age={26 + 28} />
+      <Hello name={name} age={age} />
     </div>
   )
 }

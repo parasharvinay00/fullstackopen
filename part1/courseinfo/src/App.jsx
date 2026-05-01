@@ -1,20 +1,23 @@
 import './App.css'
 
-const App = () => {
-  const now = new Date()
-  const a = 1
-  const b = 10
-  console.log(now, a+b)
-
+const Hello = () => {
   return (
     <div>
-      <p>Hello world, it is {now.toString()}</p>
-      <p>
-        {a} plus {b} is {a + b}
-      </p>
+      <p>Hello world</p>
     </div>
   )
 }
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello />
 
+      <Hello />
+      
+      <Hello />
+    </div>
+  )
+}
 export default App
 

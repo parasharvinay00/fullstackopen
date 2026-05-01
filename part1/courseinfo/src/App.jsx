@@ -1,6 +1,6 @@
 import './App.css'
 
-fconst App = () => {
+const App = () => {
   const now = new Date()
   const a = 10
   const b = 20

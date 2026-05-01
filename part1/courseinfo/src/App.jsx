@@ -1,11 +1,11 @@
 import './App.css'
 
 function App() {
-  console.log('om')
+  console.log('om namah shivaya')
 
   return (
     <div>
-      <p>shri ganesh</p>
+      <p>shri ganeshaye namah</p>
     </div>
   )
 }

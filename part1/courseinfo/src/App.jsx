@@ -24,13 +24,13 @@ const Footer = () => {
 }
 
 const App = () => {
-  const name = 'Peter'
-  const age = 10
+  const name = 'Sahil'
+  const age = 29
 
   return (
     <>
       <h1>Greetings</h1>
-      <Hello name="Maya" age={26 + 10} />
+      <Hello name="Vinay" age={29-2} />
       <Hello name={name} age={age} />
       <Footer />
     </>

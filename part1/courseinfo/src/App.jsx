@@ -1,6 +1,7 @@
 import './App.css'
 
 const Namaste = ({ name, age }) => {
+  console.log('namaste')
   return (
     <div>
       <p>
@@ -24,6 +25,7 @@ const Footer = () => {
 }
 
 const App = () => {
+  console.log('app')
   const name = 'Sahil'
   const age = 29
 

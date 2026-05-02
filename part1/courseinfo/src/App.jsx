@@ -10,13 +10,6 @@ const footer = () => {
   )
 }
 const App = () => {
-  return [
-    <h1>Greetings</h1>,
-    <Hello name='Maya' age={26 + 10} />,
-    <Footer />
-  ]
-}
-const App = () => {
   const name = 'Peter'
   const age = 10
 

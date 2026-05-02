@@ -1,31 +1,22 @@
 import './App.css'
 
 
-
-const Hello = (props) => {
-
-  console.log(props)
+const footer = () => {
+  console.log('footer')
   return (
     <div>
-      <p>
-
-        Hello {props.name}, you are {props.age} years old
-      </p>
+      greeting app created by <a href='https://github.com/mluukkai'>mluukkai</a>
     </div>
   )
 }
 
 const App = () => {
-
-  const name = 'Sahil'
-  const age = 28
-
   return (
     <div>
       <h1>Greetings</h1>
+      <Hello name='Maya' age={26 + 10} />
 
-      <Hello name='Vinay' age={26 + 28} />
-      <Hello name={name} age={age} />
+      <footer />
     </div>
   )
 }

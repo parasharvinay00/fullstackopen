@@ -16,7 +16,7 @@ const Footer = () => {
   return (
     <div>
       greeting app created by{' '}
-      <a href="https://fullstackopen.com/en/" target="_blank" rel="noreferrer">
+      <a href="https://fullstackopen.com/en/">
         Full Stack Open
       </a>
     </div>

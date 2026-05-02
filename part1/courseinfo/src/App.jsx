@@ -13,9 +13,8 @@ const footer = () => {
 const App = () => {
   return (
     <div>
-      <h1>Greetings</h1>
-      <Hello name='Maya' age={26 + 10} />
-
+      <h1>Greetings</h1>  
+    
       <footer />
     </div>
   )

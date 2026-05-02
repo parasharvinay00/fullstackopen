@@ -1,10 +1,10 @@
 import './App.css'
 
-const Hello = ({ name, age }) => {
+const Namaste = ({ name, age }) => {
   return (
     <div>
       <p>
-        Hello {name}, you are {age} years old
+        Namaste {name}, you are {age} years old
       </p>
     </div>
   )
@@ -30,8 +30,8 @@ const App = () => {
   return (
     <>
       <h1>Greetings</h1>
-      <Hello name="Vinay" age={29-2} />
-      <Hello name={name} age={age} />
+      <Namaste name="Vinay" age={29-2} />
+      <Namaste name={name} age={age} />
       <Footer />
     </>
   )

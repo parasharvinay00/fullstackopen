@@ -12,9 +12,9 @@ const Namaste = ({ name, age }) => {
 }
 
 const Footer = () => {
+  
   console.log('footer')
-
-  return (
+return (
     <div>
       greeting app created by{' '}
       <a href="https://fullstackopen.com/en/">
@@ -23,20 +23,22 @@ const Footer = () => {
     </div>
   )
 }
-
 const App = () => {
-  console.log('app')
-  const name = 'Sahil'
-  const age = 29
+  const friends = [
+    { name: 'Peter', age: 4 },
+    { name: 'Maya', age: 10 },
+  ]
 
   return (
-    <>
-      <h1>Greetings</h1>
-      <Namaste name="Vinay" age={29-2} />
-      <Namaste name={name} age={age} />
-      <Footer />
-    </>
+    <div>
+      <p>{friends[0].name} {friends[0].age}</p>
+      <p>{friends[1].name} {friends[1].age}</p>
+    </div>
   )
 }
 
 export default App
+
+
+
+

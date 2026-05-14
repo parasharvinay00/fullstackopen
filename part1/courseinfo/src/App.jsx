@@ -1,5 +1,10 @@
 import { useState } from 'react'
 
+const Button = (props) => (
+  <button onClick={props.onClick}>
+    {props.text}
+  </button>
+)
 const App = () => {
   const [value, setValue] = useState(10)
 

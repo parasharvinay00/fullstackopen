@@ -12,20 +12,15 @@ const App = () => {
     console.log('value now', newValue)
     setValue(newValue)
   }
-
-  return (
+return (
     <div>
       {value}
-      <button onClick={() => setToValue(1000)}>
-        thousand
-      </button>
-      <button onClick={() => setToValue(0)}>
-        reset
-      </button>
-      <button onClick={() => setToValue(value + 1)}>
-        increment
-      </button>
+
+      <Button onClick={() => setToValue(1000)} text="thousand" />
+      <Button onClick={() => setToValue(0)} text="reset" />
+      <Button onClick={() => setToValue(value + 1)} text="increment" />
     </div>
   )
 }
+
 export default App

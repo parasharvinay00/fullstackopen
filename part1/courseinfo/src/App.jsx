@@ -23,6 +23,8 @@ const App = () => {
       <Button onClick={() => setToValue(1000)} text="thousand" />
       <Button onClick={() => setToValue(0)} text="reset" />
       <Button onClick={() => setToValue(value + 1)} text="increment" />
+      <Button onClick={() => setToValue(value - 1)} text="decrement" />
+      <Button onClick={() => setToValue(value * 2)} text="double" />
     </div>
   )
 }

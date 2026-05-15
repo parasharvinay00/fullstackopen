@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const App = () => {
-  // Stores the list of anecdote texts that can be shown in the UI.
+  // Stores all anecdote texts that the application can display to the user.
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -13,25 +13,47 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
-  // Tracks which anecdote is currently selected for display.
+  // Keeps track of which anecdote is currently selected and shown on the screen.
   const [selected, setSelected] = useState(0)
-  console.log('App rendered with selected anecdote index:', selected)
-  console.log('Currently displayed anecdote:', anecdotes[selected])
+  console.log('Selected anecdote index:', selected)
+  console.log('Selected anecdote text:', anecdotes[selected])
 
-  // Chooses a random anecdote index and updates the state to show a new anecdote.
+  // Stores the vote count for each anecdote by matching vote positions to anecdote positions.
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  console.log('Current votes array:', votes)
+  console.log('Votes for selected anecdote:', votes[selected])
+
+  // Increases the vote count for the currently displayed anecdote and saves the updated vote list.
+  const handleVote = () => {
+    console.log('Vote button clicked for anecdote index:', selected)
+    const copy = [...votes]
+    copy[selected] += 1
+    console.log('Updated votes array after voting:', copy)
+    setVotes(copy)
+  }
+
+  // Selects a random anecdote index so the UI can display a different anecdote.
   const handleNextAnecdote = () => {
-    const randomIndex = Math.floor(Math.random() * anecdotes.length)
     console.log('Next anecdote button clicked')
-    console.log('Generated random anecdote index:', randomIndex)
+    const randomIndex = Math.floor(Math.random() * anecdotes.length)
+    console.log('Random anecdote index generated:', randomIndex)
     setSelected(randomIndex)
   }
 
-  // Renders the selected anecdote and the button for loading another one.
+  // Renders the selected anecdote, its vote count, and the action buttons for voting and navigation.
   return (
     <div>
       <div>
         {anecdotes[selected]}
       </div>
+
+      <div>
+        has {votes[selected]} votes
+      </div>
+
+      <button onClick={handleVote}>
+        vote
+      </button>
 
       <button onClick={handleNextAnecdote}>
         next anecdote

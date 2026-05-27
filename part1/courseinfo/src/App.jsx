@@ -11,6 +11,8 @@ const Button = (props) => (
 
 const App = () => {
   const [value, setValue] = useState(10)
+  //Using this statement we can simply call setValue(123) to set the state directly.
+   Object.assign(window, { setValue })
 
   const setToValue = newValue => {
     console.log('value now', newValue)

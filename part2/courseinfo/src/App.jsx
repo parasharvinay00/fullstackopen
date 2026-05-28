@@ -1,57 +1,12 @@
-const Header = ({ course }) => {
-  return (
-    <h1>{course.name}</h1>
-  )
-}
-
-const Part = ({ part }) => {
-  return (
-    <p>
-      {part.name} {part.exercises}
-    </p>
-  )
-}
-
-const Content = ({ parts }) => {
-  return (
-    <div>
-      {parts.map(part =>
-        <Part key={part.id} part={part} />
-      )}
-    </div>
-  )
-}
-
-const Total = ({ parts }) => {
-  const total = parts.reduce((sum, part) => {
-    console.log('current sum:', sum)
-    console.log('current part:', part)
-    console.log('exercises to add:', part.exercises)
-
-    return sum + part.exercises
-  }, 0)
-
-  console.log('final total:', total)
-
-  return (
-    <strong>
-      total of {total} exercises
-    </strong>
-  )
-}
-
-
-const Course = ({ course }) => {
-  return (
-    <div>
-      <Header course={course} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </div>
-  )
-}
+import Course from './components/course.jsx'
 
 const App = () => {
+  // This log marks the moment React starts executing the App component function.
+  console.log('App: render started')
+
+  // The courses array is the main application data source.
+  // Each course object contains a course name, a unique id, and an array of parts.
+  // Each part object stores its own name, exercise count, and id.
   const courses = [
     {
       name: 'Half Stack application development',
@@ -78,7 +33,7 @@ const App = () => {
           id: 4
         }
       ]
-    }, 
+    },
     {
       name: 'Node.js',
       id: 2,
@@ -97,15 +52,26 @@ const App = () => {
     }
   ]
 
+  // This log confirms that the course data has been created and is ready to be rendered.
+  console.log('App: courses initialized', courses)
+
   return (
     <div>
-      {courses.map(course =>
-        <Course key={course.id} course={course} />
-      )}
+      {courses.map(course => {
+        // The map call loops through every course in the array and creates one Course component per item.
+        // This is how React renders multiple courses from the shared data structure.
+        console.log('App: rendering course', {
+          id: course.id,
+          name: course.name,
+          partsCount: course.parts.length
+        })
+
+        // The key helps React track each rendered course efficiently during updates.
+        // The course prop passes the full course object to the child component for display.
+        return <Course key={course.id} course={course} />
+      })}
     </div>
   )
 }
-
-
 
 export default App

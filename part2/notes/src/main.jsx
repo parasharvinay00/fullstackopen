@@ -10,7 +10,8 @@ const notes = [
   },
   {
     id: 2,
-    content: 'Browser can execute only JavaScript',
+    content: 'Love is everything',
+    
     important: false
   },
   {

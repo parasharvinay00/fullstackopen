@@ -1,41 +1,32 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Note from './components/Note'
 
-const App = (props) => {
-  // First check if notes already exist in localStorage
-  const savedNotes = localStorage.getItem('notes')
-
-  // If saved notes exist, use them.
-  // Otherwise, use the original notes from props.
-  const initialNotes = savedNotes
-    ? JSON.parse(savedNotes)
-    : props.notes
-
-  // Store all notes in React state
-  const [notes, setNotes] = useState(initialNotes)
-
-  // Store the current input value
+const App = () => {
+  const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
-
-  // Store whether we show all notes or only important notes
   const [showAll, setShowAll] = useState(true)
 
-  // Save notes to localStorage every time notes change
   useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes))
-  }, [notes])
+    console.log('effect')
+
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }, [])
+
+  console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
     event.preventDefault()
 
-    if (newNote.trim() === '') {
-      return
-    }
-
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: String(notes.length + 1),
+      id: String(notes.length + 1)
     }
 
     setNotes(notes.concat(noteObject))

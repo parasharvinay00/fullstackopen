@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+// ^ Always try to prefer try-catch instead of then-catch
 // Using try/catch
 async function main() {
     try {

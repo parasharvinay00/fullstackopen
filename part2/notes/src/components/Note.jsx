@@ -1,9 +1,16 @@
-const Note = (props) => {
-  console.log('4. Note received props:', props)
+const Note = ({ note, toggleImportance }) => {
+  const label = note.important
+    ? 'make not important'
+    : 'make important'
 
-  const { note } = props
-
-  return <li>{note.content}</li>
+  return (
+    <li>
+      {note.content}{' '}
+      <button onClick={toggleImportance}>
+        {label}
+      </button>
+    </li>
+  )
 }
 
 export default Note

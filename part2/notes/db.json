@@ -3,7 +3,7 @@
     {
       "id": "1",
       "content": "HTML is easy",
-      "important": false
+      "important": true
     },
     {
       "id": "2",
@@ -42,7 +42,7 @@
     },
     {
       "content": "Post are the most important methods of HTTP protocol",
-      "important": false,
+      "important": true,
       "id": "Og3zsS3dMWI"
     },
     {
@@ -60,7 +60,7 @@
     },
     {
       "content": "1",
-      "important": false,
+      "important": true,
       "id": "Rd5K1Tin7sA"
     }
   ],

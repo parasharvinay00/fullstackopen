@@ -70,22 +70,39 @@ const App = () => {
   const handleNoteChange = event => {
     setNewNote(event.target.value)
   }
+  const toggleImportanceOf = id => {
+  console.log(`Trying to toggle importance of note ${id}`)
 
- const toggleImportanceOf = id => {
   const note = notes.find(n => n.id === id)
+  console.log('Found note:', note)
+
   const changedNote = { ...note, important: !note.important }
+  console.log('Changed note:', changedNote)
 
   noteService
-    .update(id, changedNote).then(returnedNote => {
-      setNotes(notes.map(note => note.id === id ? returnedNote : note))
-    })
+    .update(id, changedNote)
+    .then(returnedNote => {
+      console.log('Update succeeded:', returnedNote)
 
+      setNotes(notes.map(note =>
+        note.id === id ? returnedNote : note
+      ))
+    })
     .catch(error => {
+      console.log('Update failed:', error.message)
+
+      if (error.response) {
+        console.log('Status:', error.response.status)
+        console.log('Server response:', error.response.data)
+      }
+
       alert(
         `the note '${note.content}' was already deleted from server`
       )
+
       setNotes(notes.filter(n => n.id !== id))
     })
+}
 }
 
   // Decides which notes should be visible

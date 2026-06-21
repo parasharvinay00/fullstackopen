@@ -3,21 +3,21 @@
     {
       "id": "1",
       "content": "HTML is easy",
-      "important": true
+      "important": false
     },
     {
       "id": "2",
       "content": "Browser can execute only JavaScript",
-      "important": false
+      "important": true
     },
     {
       "id": "3",
       "content": "GET and POST are the most important methods of HTTP protocol",
-      "important": false
+      "important": true
     },
     {
       "content": "Post is used to create new resources",
-      "important": false,
+      "important": true,
       "id": "ylmiDntjbgo"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "content": "HTML is enough to create a website",
-      "important": false,
+      "important": true,
       "id": "sylJN-RPO_Q"
     },
     {
@@ -42,7 +42,7 @@
     },
     {
       "content": "Post are the most important methods of HTTP protocol",
-      "important": true,
+      "important": false,
       "id": "Og3zsS3dMWI"
     },
     {
@@ -60,9 +60,24 @@
     },
     {
       "content": "1",
-      "important": true,
+      "important": false,
       "id": "Rd5K1Tin7sA"
+    },
+    {
+      "content": "Divya is lovely",
+      "important": true,
+      "id": "HppagoCni_o"
+    },
+    {
+      "content": "this person is added to the notes",
+      "important": false,
+      "id": "n2ekLsrtWyE"
+    },
+    {
+      "content": "Divya is lovely",
+      "important": true,
+      "id": "lwFnzvk5R6g"
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
+  "To do  comments": "use schema from this link:https://chatgpt.com/c/6a3803de-e260-83ee-b815-a64dd303e26e"
 }

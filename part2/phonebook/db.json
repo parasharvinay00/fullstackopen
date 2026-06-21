@@ -19,7 +19,51 @@
       "name": "vinay",
       "number": "9289610693",
       "id": "mqhaVBawUkI"
+    },
+    {
+      "name": "sahil ",
+      "number": "4309343924",
+      "id": "IV6suGoT52E"
+    },
+    {
+      "name": "sania",
+      "number": "4309343923",
+      "id": "eCpJXvc_Gow"
+    },
+    {
+      "name": "sara",
+      "number": "3094104",
+      "id": "GBPNx7ZtCuw"
+    },
+    {
+      "name": "sahil 1",
+      "number": "28y9837",
+      "id": "qTSJDYi8hpA"
+    },
+    {
+      "name": "a",
+      "number": "1",
+      "id": "Qdm35S_AJU4"
+    },
+    {
+      "name": "b ",
+      "number": "",
+      "id": "LJsKy20Q-VU"
+    },
+    {
+      "name": "b",
+      "number": "1",
+      "id": "CnEX4sdGbOM"
+    },
+    {
+      "name": "c",
+      "number": "1",
+      "id": "edGH4RiMEfQ"
+    },
+    {
+      "name": "C2",
+      "number": "2",
+      "id": "lH1N7POTPVU"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

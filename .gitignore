@@ -1,1 +1,8 @@
-node_modules
+node_modules/
+**/node_modules/
+.vscode/
+.env
+postman-linux-x64/
+postman-linux-x64 (2)/
+postman-linux-x64 (3)/
+postman-linux-x64.tar.gz

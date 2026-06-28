@@ -1,0 +1,41 @@
+{
+  "legacyPersons": [
+    {
+      "id": "legacy-1",
+      "name": "Arto Hellas",
+      "number": "040-123456"
+    },
+    {
+      "id": "legacy-2",
+      "name": "Ada Lovelace",
+      "number": "39-44-5323523"
+    },
+    {
+      "id": "legacy-3",
+      "name": "Dan Abramov",
+      "number": "12-43-234345"
+    },
+    {
+      "id": "legacy-4",
+      "name": "Mary Poppendieck",
+      "number": "39-23-6423122"
+    }
+  ],
+  "persons": [
+    {
+      "id": "754621ea-7424-417a-860e-5e6440155f96",
+      "name": "vinay",
+      "number": "9289610693",
+      "user": "7c580331-e954-4698-acbd-25647a2fe324"
+    }
+  ],
+  "users": [
+    {
+      "id": "7c580331-e954-4698-acbd-25647a2fe324",
+      "username": "ved",
+      "usernameNormalized": "ved",
+      "phoneNumber": "+919289610693",
+      "passwordHash": "$2b$10$hZKZ1rWC7o7nXt61W5HmH.4C/XqiaRvSDYYEsYwN5yCuzWmzIIInK"
+    }
+  ]
+}

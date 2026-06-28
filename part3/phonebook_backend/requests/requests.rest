@@ -1,0 +1,35 @@
+### Get all persons before deletion
+GET http://localhost:3001/api/persons
+
+### Add a new person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Grace Hopper",
+  "number": "123-456789"
+}
+
+### Reject a duplicate name
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Ada Lovelace",
+  "number": "000-000000"
+}
+
+### Reject a missing number
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Alan Turing"
+}
+
+### Delete the person with ID 2
+DELETE http://localhost:3001/api/persons/933123900
+
+
+### Get all persons after deletion
+GET http://localhost:3001/api/persons

@@ -19,6 +19,8 @@ let notes = [
 // Allows Express to read JSON request bodies
 app.use(express.json())
 
+app.use(express.static('dist'))
+
 app.get('/api/notes', (request, response) => {
     response.json(notes)
 })

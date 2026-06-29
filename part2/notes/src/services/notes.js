@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://ved-notes-backend.onrender.com/api/notes'
+const baseUrl = '/api/notes'
 
 const getAll = () => {
     const request = axios.get(baseUrl)

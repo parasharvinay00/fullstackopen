@@ -41,7 +41,7 @@ app.get('/info', async (request, response, next) => {
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
-app.use('/api/perons', auth.requireAuth, personsRouter)
+app.use('/api/persons', auth.requireAuth, personsRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

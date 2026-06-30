@@ -1,57 +1,37 @@
-### Get all persons before deletion
-GET http://localhost:3001/api/persons
+@deployedBaseUrl = https://phonebook-backend-a96k.onrender.com
 
-### Add a new person
-POST http://localhost:3001/api/persons
+### Create user
+POST {{deployedBaseUrl}}/api/users
 Content-Type: application/json
+
+{
+  "username": "123",
+  "name": "123",
+  "phoneNumber": "9000000001",
+  "password": "thisisshrikrishna@RADHA100"
+}
+### Login
+POST {{deployedBaseUrl}}/api/login
+Content-Type: application/json
+
+{
+  "identifier": "123",
+  "password": "thisisshrikrishna@RADHA100"
+}
+
+ @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM5ZjllY2EwLTc2OWMtNGM1ZS1hMzg2LTg2MjEwNzQ2YTZhYiIsInVzZXJuYW1lIjoiMTIzIiwiaWF0IjoxNzgyODI1NzUzLCJleHAiOjE3ODI4NTQ1NTN9.rEvIpu52GXVPd78kU3ESjgfDInNO5zYxvtxj1O2jYWY
+
+### Get persons
+GET {{deployedBaseUrl}}/api/persons
+Authorization: Bearer {{token}}
+
+
+### Create person
+POST {{deployedBaseUrl}}/api/persons
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "Grace Hopper",
   "number": "123-456789"
-}
-
-### Reject a duplicate name
-POST http://localhost:3001/api/persons
-Content-Type: application/json
-
-{
-  "name": "Ada Lovelace",
-  "number": "000-000000"
-}
-
-### Reject a missing number
-POST http://localhost:3001/api/persons
-Content-Type: application/json
-
-{
-  "name": "Alan Turing"
-}
-
-### Delete the person with ID 2
-DELETE http://localhost:3001/api/persons/933123900
-
-
-### Get all persons after deletion
-GET http://localhost:3001/api/persons
-
-@baseUrl = http://localhost:3001
-
-### Create a test user
-POST {{baseUrl}}/api/users
-Content-Type: application/json
-
-{
-  "username": "veda",
-  "name": "Veda",
-  "phoneNumber": "9389610693",
-  "password": "thisisshrikrishna@RADHA89"
-}
-
-### Login
-POST {{baseUrl}}/api/login
-Content-Type: application/json
-
-{
-  "identifier": "veda",
-  "password": "thisisshrikrishna@RADHA89"
 }

@@ -24,6 +24,10 @@ app.use(express.json())
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :safe-body')
 )
+// Redirect the root URL to the public information page
+app.get('/', (request, response) => {
+  response.redirect('/info')
+})
 
 app.get('/info', async (request, response, next) => {
   try {

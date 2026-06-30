@@ -1,3 +1,4 @@
+const { ConfigurationError } = require('../config')
 const ApiError = require('../utils/ApiError')
 
 const errorHandler = (error, request, response, next) => {
@@ -16,6 +17,14 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'TokenExpiredError') {
     return response.status(401).json({
       error: 'token expired'
+    })
+  }
+
+  if (error instanceof ConfigurationError) {
+    console.error(error.stack || error)
+
+    return response.status(500).json({
+      error: 'internal server error'
     })
   }
 

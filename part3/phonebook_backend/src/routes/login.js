@@ -10,7 +10,7 @@ const loginRouter = express.Router()
 
 loginRouter.post('/', async (request, response, next) => {
   try {
-    const { identifier, password } = request.body
+    const { identifier, password } = request.body || {}
 
     if (typeof identifier !== 'string' || !identifier.trim()) {
       throw new ApiError(400, 'identifier is required')

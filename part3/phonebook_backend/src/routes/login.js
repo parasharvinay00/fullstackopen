@@ -1,10 +1,10 @@
 const express = require('express')
-const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const { JWT_SECRET, TOKEN_EXPIRATION } = require('../config')
+const { getJwtSecret, TOKEN_EXPIRATION } = require('../config')
 const ApiError = require('../utils/ApiError')
 const { findUserByIdentifier, toPublicUser } = require('../models/users')
+const { comparePassword } = require('../utils/passwords')
 
 const loginRouter = express.Router()
 
@@ -12,14 +12,16 @@ loginRouter.post('/', async (request, response, next) => {
   try {
     const { identifier, password } = request.body
 
-    if (!identifier || typeof identifier !== 'string' || !password || typeof password !== 'string') {
-      throw new ApiError(400, 'identifier and password are required')
+    if (typeof identifier !== 'string' || !identifier.trim()) {
+      throw new ApiError(400, 'identifier is required')
+    }
+
+    if (typeof password !== 'string' || !password.trim()) {
+      throw new ApiError(400, 'password is required')
     }
 
     const user = await findUserByIdentifier(identifier)
-    const passwordCorrect = user
-      ? await bcrypt.compare(password, user.passwordHash)
-      : false
+    const passwordCorrect = await comparePassword(password, user?.passwordHash)
 
     if (!user || !passwordCorrect) {
       throw new ApiError(401, 'invalid credentials')
@@ -27,7 +29,7 @@ loginRouter.post('/', async (request, response, next) => {
 
     const token = jwt.sign(
       { id: user.id, username: user.usernameNormalized },
-      JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: TOKEN_EXPIRATION }
     )
 

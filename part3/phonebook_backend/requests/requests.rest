@@ -35,3 +35,14 @@ Authorization: Bearer {{token}}
   "name": "Grace Hopper",
   "number": "123-456789"
 }
+
+@baseUrl = https://phonebook-backend-a96k.onrender.com
+
+### Login
+POST {{baseUrl}}/api/login
+Content-Type: application/json
+
+{
+  "identifier": "123",
+  "password": "thisisshrikrishna@RADHA100"
+}

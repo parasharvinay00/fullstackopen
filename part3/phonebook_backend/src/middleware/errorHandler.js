@@ -19,7 +19,7 @@ const errorHandler = (error, request, response, next) => {
     })
   }
 
-  console.error(error.message)
+  console.error(error.stack || error)
 
   return response.status(500).json({
     error: 'internal server error'

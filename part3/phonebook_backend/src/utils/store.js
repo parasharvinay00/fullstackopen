@@ -28,9 +28,23 @@ const legacyPersons = [
 ]
 
 const initialState = {
-  legacyPersons,
   persons: [],
   users: []
+}
+
+const coerceCollection = value => (Array.isArray(value) ? value : [])
+
+const coerceState = state => {
+  const safeState = state && typeof state === 'object' ? state : {}
+
+  return {
+    ...safeState,
+    legacyPersons: Array.isArray(safeState.legacyPersons)
+      ? safeState.legacyPersons
+      : legacyPersons,
+    persons: coerceCollection(safeState.persons),
+    users: coerceCollection(safeState.users)
+  }
 }
 
 let pendingWrite = Promise.resolve()
@@ -49,13 +63,17 @@ const read = async () => {
   await ensureStore()
   const raw = await fs.readFile(dataFile, 'utf8')
 
-  return JSON.parse(raw)
+  if (!raw.trim()) {
+    return coerceState(initialState)
+  }
+
+  return coerceState(JSON.parse(raw))
 }
 
 const update = async updater => {
   const nextWrite = pendingWrite.then(async () => {
     const currentState = await read()
-    const nextState = await updater(currentState)
+    const nextState = coerceState(await updater(currentState))
 
     await fs.writeFile(dataFile, JSON.stringify(nextState, null, 2))
 
@@ -68,6 +86,7 @@ const update = async updater => {
 }
 
 module.exports = {
+  coerceState,
   dataFile,
   read,
   update

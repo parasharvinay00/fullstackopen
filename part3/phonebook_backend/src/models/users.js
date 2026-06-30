@@ -9,6 +9,18 @@ const { validatePasswordStrength } = require('../utils/passwords')
 const db = require('../utils/store')
 
 const normalizeUsername = username => username.trim().toLowerCase()
+const getUsers = state => (Array.isArray(state.users) ? state.users : [])
+const getUserNormalizedUsername = user => {
+  if (typeof user?.usernameNormalized === 'string' && user.usernameNormalized.trim()) {
+    return normalizeUsername(user.usernameNormalized)
+  }
+
+  if (typeof user?.username === 'string' && user.username.trim()) {
+    return normalizeUsername(user.username)
+  }
+
+  return ''
+}
 
 const toPublicUser = user => ({
   id: user.id,
@@ -40,12 +52,13 @@ const validateUserInput = async ({ username, phoneNumber, password }) => {
   const normalizedPhoneNumber = normalizeIndianPhoneNumber(phoneNumber)
   const usernameNormalized = normalizeUsername(trimmedUsername)
   const state = await db.read()
+  const users = getUsers(state)
 
-  if (state.users.some(user => user.usernameNormalized === usernameNormalized)) {
+  if (users.some(user => getUserNormalizedUsername(user) === usernameNormalized)) {
     throw new ApiError(409, 'username already exists')
   }
 
-  if (state.users.some(user => user.phoneNumber === normalizedPhoneNumber)) {
+  if (users.some(user => user?.phoneNumber === normalizedPhoneNumber)) {
     throw new ApiError(409, 'phone number already exists')
   }
 
@@ -84,12 +97,13 @@ const findUserByIdentifier = async identifier => {
   const trimmedIdentifier = typeof identifier === 'string' ? identifier.trim() : ''
 
   if (!trimmedIdentifier) {
-    return null
+    return undefined
   }
 
   const state = await db.read()
-  const normalizedIdentifier = trimmedIdentifier.toLowerCase()
-  const byUsername = state.users.find(user => user.usernameNormalized === normalizedIdentifier)
+  const users = getUsers(state)
+  const normalizedIdentifier = normalizeUsername(trimmedIdentifier)
+  const byUsername = users.find(user => getUserNormalizedUsername(user) === normalizedIdentifier)
 
   if (byUsername) {
     return byUsername
@@ -98,16 +112,17 @@ const findUserByIdentifier = async identifier => {
   const normalizedPhone = tryNormalizeIndianPhoneNumber(trimmedIdentifier)
 
   if (!normalizedPhone) {
-    return null
+    return undefined
   }
 
-  return state.users.find(user => user.phoneNumber === normalizedPhone) || null
+  return users.find(user => user?.phoneNumber === normalizedPhone)
 }
 
 const findUserById = async id => {
   const state = await db.read()
+  const users = getUsers(state)
 
-  return state.users.find(user => user.id === id) || null
+  return users.find(user => user?.id === id) || null
 }
 
 module.exports = {

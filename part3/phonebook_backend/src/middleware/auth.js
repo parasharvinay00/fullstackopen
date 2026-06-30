@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const { JWT_SECRET } = require('../config')
+const { getJwtSecret } = require('../config')
 const ApiError = require('../utils/ApiError')
 
 const getTokenFrom = request => {
@@ -25,7 +25,7 @@ const requireAuth = (request, response, next) => {
       throw new ApiError(401, 'token missing')
     }
 
-    const decodedToken = jwt.verify(token, JWT_SECRET)
+    const decodedToken = jwt.verify(token, getJwtSecret())
 
     if (!decodedToken.id) {
       throw new ApiError(401, 'invalid token')

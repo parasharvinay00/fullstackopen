@@ -1,6 +1,11 @@
 import axios from 'axios'
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
+const deployedApiBaseUrl = 'https://phonebook-backend-a96k.onrender.com/api'
+const isLocalHostname = typeof window !== 'undefined' &&
+  ['localhost', '127.0.0.1'].includes(window.location.hostname)
+
+const baseURL = import.meta.env.VITE_API_BASE_URL ||
+  (isLocalHostname ? 'http://localhost:3001/api' : deployedApiBaseUrl)
 
 const apiClient = axios.create({
   baseURL,

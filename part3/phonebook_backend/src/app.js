@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const { FRONTEND_ORIGIN } = require('./config')
+const { getFrontendOrigins } = require('./config')
 const auth = require('./middleware/auth')
 const errorHandler = require('./middleware/errorHandler')
 const unknownEndpoint = require('./middleware/unknownEndpoint')
@@ -14,11 +14,18 @@ const { createSafeBodySnapshot } = require('./utils/logging')
 const db = require('./utils/store')
 
 const app = express()
+const allowedOrigins = getFrontendOrigins()
 
 morgan.token('safe-body', request => JSON.stringify(createSafeBodySnapshot(request.body)))
 
 app.use(cors({
-  origin: FRONTEND_ORIGIN
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      return callback(null, true)
+    }
+
+    return callback(new Error('Not allowed by CORS'))
+  }
 }))
 app.use(express.json())
 app.use(

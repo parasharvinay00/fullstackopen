@@ -1,3 +1,24 @@
+# Phonebook Frontend
+
+The phonebook frontend uses `VITE_API_BASE_URL` for the backend API base URL.
+
+Local development:
+
+```bash
+VITE_API_BASE_URL=http://localhost:3001/api
+```
+
+Production deployment:
+
+```bash
+VITE_API_BASE_URL=https://phonebook-backend-a96k.onrender.com/api
+```
+
+If `VITE_API_BASE_URL` is not set, the app now falls back to:
+
+- `http://localhost:3001/api` on `localhost` / `127.0.0.1`
+- `https://phonebook-backend-a96k.onrender.com/api` on non-localhost deployments
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

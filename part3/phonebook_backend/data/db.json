@@ -36,6 +36,13 @@
       "usernameNormalized": "ved",
       "phoneNumber": "+919289610693",
       "passwordHash": "$2b$10$hZKZ1rWC7o7nXt61W5HmH.4C/XqiaRvSDYYEsYwN5yCuzWmzIIInK"
+    },
+    {
+      "id": "d24a71f0-0923-49e1-9965-ba00cfe693ee",
+      "username": "veda",
+      "usernameNormalized": "veda",
+      "phoneNumber": "+919389610693",
+      "passwordHash": "$2b$10$8bgmeEGVjLYV4TINDfkAx.XjmTobkiaJhu4zF.DIMXxCwuI2zkqKe"
     }
   ]
 }

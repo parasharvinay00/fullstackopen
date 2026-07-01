@@ -107,6 +107,45 @@ test('phonebook backend supports plain CRUD', async t => {
     error: 'name must be unique'
   })
 
+  const missingNameResponse = await createRequest(baseUrl, '/api/persons', {
+    method: 'POST',
+    body: {
+      name: '',
+      number: '123-456789'
+    }
+  })
+
+  assert.equal(missingNameResponse.status, 400)
+  assert.deepEqual(await missingNameResponse.json(), {
+    error: 'name and number are required'
+  })
+
+  const missingNumberResponse = await createRequest(baseUrl, '/api/persons', {
+    method: 'POST',
+    body: {
+      name: 'Alan Turing',
+      number: ''
+    }
+  })
+
+  assert.equal(missingNumberResponse.status, 400)
+  assert.deepEqual(await missingNumberResponse.json(), {
+    error: 'name and number are required'
+  })
+
+  const blankValuesResponse = await createRequest(baseUrl, '/api/persons', {
+    method: 'POST',
+    body: {
+      name: '   ',
+      number: '   '
+    }
+  })
+
+  assert.equal(blankValuesResponse.status, 400)
+  assert.deepEqual(await blankValuesResponse.json(), {
+    error: 'name and number are required'
+  })
+
   const updateResponse = await createRequest(baseUrl, `/api/persons/${createdPerson.id}`, {
     method: 'PUT',
     body: {

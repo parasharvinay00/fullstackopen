@@ -31,13 +31,16 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
+    const trimmedName = newName.trim()
+    const trimmedNumber = newNumber.trim()
+
     const existingPerson = persons.find(
-      person => person.name.toLowerCase() === newName.toLowerCase()
+      person => person.name.trim().toLowerCase() === trimmedName.toLowerCase()
     )
 
     const personObject = {
-      name: newName,
-      number: newNumber
+      name: trimmedName,
+      number: trimmedNumber
     }
 
     if (existingPerson) {
@@ -48,7 +51,7 @@ const App = () => {
       if (confirmUpdate) {
         const changedPerson = {
           ...existingPerson,
-          number: newNumber
+          number: trimmedNumber
         }
 
         personService
@@ -70,6 +73,8 @@ const App = () => {
       return
     }
 
+    console.log('Submitting person:', personObject)
+
     personService
       .create(personObject)
       .then(returnedPerson => {
@@ -79,6 +84,38 @@ const App = () => {
 
         setNewName('')
         setNewNumber('')
+      })
+      .catch(error => {
+        console.error('Create person failed:', {
+          status: error.response?.status,
+          data: error.response?.data
+        })
+
+        const backendMessage =
+          error.response?.data?.error ||
+          'Could not add the person'
+
+        showNotification(backendMessage)
+      })
+  }
+
+  const deletePerson = (personToDelete) => {
+    const confirmDelete = window.confirm(
+      `Delete ${personToDelete.name}?`
+    )
+
+    if (!confirmDelete) {
+      return
+    }
+
+    personService
+      .remove(personToDelete.id)
+      .then(() => {
+        setPersons(
+          persons.filter(person => person.id !== personToDelete.id)
+        )
+
+        showNotification(`Deleted ${personToDelete.name}`)
       })
   }
 
@@ -109,7 +146,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }

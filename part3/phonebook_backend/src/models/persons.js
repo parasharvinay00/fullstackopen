@@ -9,17 +9,14 @@ const sanitizePersonInput = person => ({
 })
 
 const validatePersonInput = async ({ name, number }, existingPersonId = null) => {
-  if (!name) {
-    throw new ApiError(400, 'name is missing')
-  }
-
-  if (!number) {
-    throw new ApiError(400, 'number is missing')
+  if (!name || !number) {
+    throw new ApiError(400, 'name and number are required')
   }
 
   const state = await db.read()
+  const normalizedName = name.trim().toLowerCase()
   const duplicateName = state.persons.find(person =>
-    person.name.toLowerCase() === name.toLowerCase() &&
+    person.name.trim().toLowerCase() === normalizedName &&
     person.id !== existingPersonId
   )
 

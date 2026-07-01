@@ -31,7 +31,22 @@ personsRouter.get('/:id', async (request, response, next) => {
 
 personsRouter.post('/', async (request, response, next) => {
   try {
-    const person = await personsModel.create(request.body)
+    console.log('POST /api/persons body:', request.body)
+
+    const { name, number } = request.body
+
+    if (
+      typeof name !== 'string' ||
+      typeof number !== 'string' ||
+      !name.trim() ||
+      !number.trim()
+    ) {
+      return response.status(400).json({
+        error: 'name and number are required'
+      })
+    }
+
+    const person = await personsModel.create({ name, number })
 
     response.status(201).json(person)
   } catch (error) {

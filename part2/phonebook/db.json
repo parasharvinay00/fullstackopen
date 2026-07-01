@@ -64,17 +64,6 @@
       "name": "C2",
       "number": "2",
       "id": "lH1N7POTPVU"
-    },
-    {
-      "name": "d ",
-      "number": "4",
-      "id": "9UKbLSK01SI"
-    },
-    {
-      "name": "a ",
-      "number": "9o",
-      "id": "mViLXk2K9u8"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

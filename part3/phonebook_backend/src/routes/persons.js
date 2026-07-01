@@ -7,7 +7,7 @@ const personsRouter = express.Router()
 
 personsRouter.get('/', async (request, response, next) => {
   try {
-    const persons = await personsModel.getAllByUser(request.authenticatedUserId)
+    const persons = await personsModel.getAll()
 
     response.json(persons)
   } catch (error) {
@@ -17,7 +17,7 @@ personsRouter.get('/', async (request, response, next) => {
 
 personsRouter.get('/:id', async (request, response, next) => {
   try {
-    const person = await personsModel.getByIdForUser(request.params.id, request.authenticatedUserId)
+    const person = await personsModel.getById(request.params.id)
 
     if (!person) {
       throw new ApiError(404, 'person not found')
@@ -31,7 +31,7 @@ personsRouter.get('/:id', async (request, response, next) => {
 
 personsRouter.post('/', async (request, response, next) => {
   try {
-    const person = await personsModel.createForUser(request.body, request.authenticatedUserId)
+    const person = await personsModel.create(request.body)
 
     response.status(201).json(person)
   } catch (error) {
@@ -41,11 +41,7 @@ personsRouter.post('/', async (request, response, next) => {
 
 personsRouter.put('/:id', async (request, response, next) => {
   try {
-    const person = await personsModel.updateForUser(
-      request.params.id,
-      request.body,
-      request.authenticatedUserId
-    )
+    const person = await personsModel.update(request.params.id, request.body)
 
     response.json(person)
   } catch (error) {
@@ -55,7 +51,7 @@ personsRouter.put('/:id', async (request, response, next) => {
 
 personsRouter.delete('/:id', async (request, response, next) => {
   try {
-    await personsModel.removeForUser(request.params.id, request.authenticatedUserId)
+    await personsModel.remove(request.params.id)
 
     response.status(204).end()
   } catch (error) {

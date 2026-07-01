@@ -8,7 +8,7 @@ const sanitizePersonInput = person => ({
   number: typeof person.number === 'string' ? person.number.trim() : ''
 })
 
-const validatePersonInput = async ({ name, number }, userId, existingPersonId = null) => {
+const validatePersonInput = async ({ name, number }, existingPersonId = null) => {
   if (!name) {
     throw new ApiError(400, 'name is missing')
   }
@@ -19,7 +19,6 @@ const validatePersonInput = async ({ name, number }, userId, existingPersonId = 
 
   const state = await db.read()
   const duplicateName = state.persons.find(person =>
-    person.user === userId &&
     person.name.toLowerCase() === name.toLowerCase() &&
     person.id !== existingPersonId
   )
@@ -29,28 +28,27 @@ const validatePersonInput = async ({ name, number }, userId, existingPersonId = 
   }
 }
 
-const getAllByUser = async userId => {
+const getAll = async () => {
   const state = await db.read()
 
-  return state.persons.filter(person => person.user === userId)
+  return state.persons
 }
 
-const getByIdForUser = async (id, userId) => {
+const getById = async id => {
   const state = await db.read()
 
-  return state.persons.find(person => person.id === id && person.user === userId) || null
+  return state.persons.find(person => person.id === id) || null
 }
 
-const createForUser = async (personInput, userId) => {
+const create = async personInput => {
   const person = sanitizePersonInput(personInput)
   const newPerson = {
     id: randomUUID(),
     name: person.name,
-    number: person.number,
-    user: userId
+    number: person.number
   }
 
-  await validatePersonInput(person, userId)
+  await validatePersonInput(person)
 
   await db.update(state => ({
       ...state,
@@ -60,15 +58,15 @@ const createForUser = async (personInput, userId) => {
   return newPerson
 }
 
-const updateForUser = async (id, personInput, userId) => {
+const update = async (id, personInput) => {
   const person = sanitizePersonInput(personInput)
-  const existingPerson = await getByIdForUser(id, userId)
+  const existingPerson = await getById(id)
 
   if (!existingPerson) {
     throw new ApiError(404, 'person not found')
   }
 
-  await validatePersonInput(person, userId, id)
+  await validatePersonInput(person, id)
 
   const nextPerson = {
     ...existingPerson,
@@ -86,8 +84,8 @@ const updateForUser = async (id, personInput, userId) => {
   return nextPerson
 }
 
-const removeForUser = async (id, userId) => {
-  const existingPerson = await getByIdForUser(id, userId)
+const remove = async id => {
+  const existingPerson = await getById(id)
 
   if (!existingPerson) {
     throw new ApiError(404, 'person not found')
@@ -100,9 +98,9 @@ const removeForUser = async (id, userId) => {
 }
 
 module.exports = {
-  createForUser,
-  getAllByUser,
-  getByIdForUser,
-  removeForUser,
-  updateForUser
+  create,
+  getAll,
+  getById,
+  remove,
+  update
 }

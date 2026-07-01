@@ -4,46 +4,22 @@ const path = require('path')
 const dataDirectory = path.join(__dirname, '..', '..', 'data')
 const dataFile = path.join(dataDirectory, 'db.json')
 
-const legacyPersons = [
-  {
-    id: 'legacy-1',
-    name: 'Arto Hellas',
-    number: '040-123456'
-  },
-  {
-    id: 'legacy-2',
-    name: 'Ada Lovelace',
-    number: '39-44-5323523'
-  },
-  {
-    id: 'legacy-3',
-    name: 'Dan Abramov',
-    number: '12-43-234345'
-  },
-  {
-    id: 'legacy-4',
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122'
-  }
-]
-
 const initialState = {
-  persons: [],
-  users: []
+  persons: []
 }
 
 const coerceCollection = value => (Array.isArray(value) ? value : [])
 
 const coerceState = state => {
   const safeState = state && typeof state === 'object' ? state : {}
+  const persons = coerceCollection(safeState.persons).map(person => ({
+    id: person.id,
+    name: typeof person.name === 'string' ? person.name : '',
+    number: typeof person.number === 'string' ? person.number : ''
+  }))
 
   return {
-    ...safeState,
-    legacyPersons: Array.isArray(safeState.legacyPersons)
-      ? safeState.legacyPersons
-      : legacyPersons,
-    persons: coerceCollection(safeState.persons),
-    users: coerceCollection(safeState.users)
+    persons
   }
 }
 

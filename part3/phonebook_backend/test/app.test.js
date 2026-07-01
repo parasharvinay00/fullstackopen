@@ -4,15 +4,11 @@ const fs = require('fs/promises')
 const http = require('http')
 const path = require('path')
 
-process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret'
-process.env.TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || '1h'
-
 const app = require('../src/app')
 const { dataFile } = require('../src/utils/store')
 
 const baseState = {
-  persons: [],
-  users: []
+  persons: []
 }
 
 const createRequest = (baseUrl, pathname, options = {}) => {
@@ -55,7 +51,7 @@ const createRequest = (baseUrl, pathname, options = {}) => {
   })
 }
 
-test('phonebook backend auth and login flows', async t => {
+test('phonebook backend supports plain CRUD', async t => {
   const originalDbContents = await fs.readFile(dataFile, 'utf8').catch(() => null)
   const server = http.createServer(app)
 
@@ -79,197 +75,65 @@ test('phonebook backend auth and login flows', async t => {
 
   const address = server.address()
   const baseUrl = `http://127.0.0.1:${address.port}`
-  const credentials = {
-    username: 'tester',
-    name: 'Tester',
-    phoneNumber: '9289610693',
-    password: 'Test-password1!'
-  }
 
-  const registerResponse = await createRequest(baseUrl, '/api/users', {
-    method: 'POST',
-    body: credentials
-  })
+  const initialListResponse = await createRequest(baseUrl, '/api/persons')
+  assert.equal(initialListResponse.status, 200)
+  assert.deepEqual(await initialListResponse.json(), [])
 
-  assert.equal(registerResponse.status, 201)
-  const registeredUser = await registerResponse.json()
-  assert.equal(registeredUser.username, credentials.username)
-
-  const loginByUsernameResponse = await createRequest(baseUrl, '/api/login', {
+  const createResponse = await createRequest(baseUrl, '/api/persons', {
     method: 'POST',
     body: {
-      identifier: credentials.username,
-      password: credentials.password
+      name: 'Grace Hopper',
+      number: '123-456789'
     }
   })
 
-  assert.equal(loginByUsernameResponse.status, 200)
-  const loginByUsernameBody = await loginByUsernameResponse.json()
-  assert.equal(typeof loginByUsernameBody.token, 'string')
-  assert.equal(loginByUsernameBody.user.username, credentials.username)
-  assert.equal(loginByUsernameBody.user.phoneNumber, '+919289610693')
+  assert.equal(createResponse.status, 201)
+  const createdPerson = await createResponse.json()
+  assert.equal(createdPerson.name, 'Grace Hopper')
+  assert.equal(createdPerson.number, '123-456789')
+  assert.ok(createdPerson.id)
 
-  const loginByPhoneResponse = await createRequest(baseUrl, '/api/login', {
+  const duplicateResponse = await createRequest(baseUrl, '/api/persons', {
     method: 'POST',
     body: {
-      identifier: credentials.phoneNumber,
-      password: credentials.password
+      name: 'grace hopper',
+      number: '999-999999'
     }
   })
 
-  assert.equal(loginByPhoneResponse.status, 200)
-  const loginByPhoneBody = await loginByPhoneResponse.json()
-  assert.equal(typeof loginByPhoneBody.token, 'string')
+  assert.equal(duplicateResponse.status, 400)
+  assert.deepEqual(await duplicateResponse.json(), {
+    error: 'name must be unique'
+  })
 
-  const unknownIdentifierResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
+  const updateResponse = await createRequest(baseUrl, `/api/persons/${createdPerson.id}`, {
+    method: 'PUT',
     body: {
-      identifier: 'unknown-user',
-      password: credentials.password
+      name: 'Grace Hopper',
+      number: '555-000000'
     }
   })
 
-  assert.equal(unknownIdentifierResponse.status, 401)
-  assert.deepEqual(await unknownIdentifierResponse.json(), {
-    error: 'invalid credentials'
+  assert.equal(updateResponse.status, 200)
+  assert.deepEqual(await updateResponse.json(), {
+    ...createdPerson,
+    number: '555-000000'
   })
 
-  const wrongPasswordResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      identifier: credentials.username,
-      password: 'Wrong-password1!'
-    }
+  const byIdResponse = await createRequest(baseUrl, `/persons/${createdPerson.id}`)
+  assert.equal(byIdResponse.status, 200)
+  assert.deepEqual(await byIdResponse.json(), {
+    ...createdPerson,
+    number: '555-000000'
   })
 
-  assert.equal(wrongPasswordResponse.status, 401)
-  assert.deepEqual(await wrongPasswordResponse.json(), {
-    error: 'invalid credentials'
+  const deleteResponse = await createRequest(baseUrl, `/api/persons/${createdPerson.id}`, {
+    method: 'DELETE'
   })
+  assert.equal(deleteResponse.status, 204)
 
-  await fs.writeFile(dataFile, JSON.stringify({
-    persons: [],
-    users: [
-      {
-        id: 'malformed-user',
-        username: 'legacy-user',
-        usernameNormalized: 'legacy-user',
-        phoneNumber: '+919111111111'
-      }
-    ]
-  }, null, 2))
-
-  const missingPasswordHashResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      identifier: 'legacy-user',
-      password: credentials.password
-    }
-  })
-
-  assert.equal(missingPasswordHashResponse.status, 401)
-  assert.deepEqual(await missingPasswordHashResponse.json(), {
-    error: 'invalid credentials'
-  })
-
-  const missingIdentifierResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      password: credentials.password
-    }
-  })
-
-  assert.equal(missingIdentifierResponse.status, 400)
-  assert.deepEqual(await missingIdentifierResponse.json(), {
-    error: 'identifier is required'
-  })
-
-  const missingPasswordResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      identifier: credentials.username
-    }
-  })
-
-  assert.equal(missingPasswordResponse.status, 400)
-  assert.deepEqual(await missingPasswordResponse.json(), {
-    error: 'password is required'
-  })
-
-  await fs.writeFile(dataFile, JSON.stringify({
-    persons: []
-  }, null, 2))
-
-  const missingUsersCollectionResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      identifier: credentials.username,
-      password: credentials.password
-    }
-  })
-
-  assert.equal(missingUsersCollectionResponse.status, 401)
-  assert.deepEqual(await missingUsersCollectionResponse.json(), {
-    error: 'invalid credentials'
-  })
-
-  await fs.writeFile(dataFile, JSON.stringify({
-    persons: [],
-    users: {}
-  }, null, 2))
-
-  const malformedUsersCollectionResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      identifier: credentials.username,
-      password: credentials.password
-    }
-  })
-
-  assert.equal(malformedUsersCollectionResponse.status, 401)
-  assert.deepEqual(await malformedUsersCollectionResponse.json(), {
-    error: 'invalid credentials'
-  })
-
-  await fs.writeFile(dataFile, JSON.stringify(baseState, null, 2))
-
-  const secondRegisterResponse = await createRequest(baseUrl, '/api/users', {
-    method: 'POST',
-    body: credentials
-  })
-
-  assert.equal(secondRegisterResponse.status, 201)
-
-  const secondLoginResponse = await createRequest(baseUrl, '/api/login', {
-    method: 'POST',
-    body: {
-      identifier: credentials.username,
-      password: credentials.password
-    }
-  })
-
-  assert.equal(secondLoginResponse.status, 200)
-  const secondLoginBody = await secondLoginResponse.json()
-
-  const personsWithoutTokenResponse = await createRequest(baseUrl, '/api/persons')
-
-  assert.equal(personsWithoutTokenResponse.status, 401)
-  assert.deepEqual(await personsWithoutTokenResponse.json(), {
-    error: 'token missing'
-  })
-
-  const personsWithTokenResponse = await createRequest(baseUrl, '/api/persons', {
-    headers: {
-      authorization: `Bearer ${secondLoginBody.token}`
-    }
-  })
-
-  assert.equal(personsWithTokenResponse.status, 200)
-  assert.deepEqual(await personsWithTokenResponse.json(), [])
-
-  const infoResponse = await createRequest(baseUrl, '/info')
-
-  assert.equal(infoResponse.status, 200)
-  const infoBody = await infoResponse.text()
-  assert.match(infoBody, /Phonebook has info for 0 contacts/)
+  const finalListResponse = await createRequest(baseUrl, '/api/persons')
+  assert.equal(finalListResponse.status, 200)
+  assert.deepEqual(await finalListResponse.json(), [])
 })

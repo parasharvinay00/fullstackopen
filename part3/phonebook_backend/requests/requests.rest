@@ -1,51 +1,13 @@
-@deployedBaseUrl = https://phonebook-backend-a96k.onrender.com
-@token = 40884cf08b2b5c30545de7fd4523b1ec85e7e1a946dca2eb155a36463ac921293891ec68f2135ebda60eebd8189a0d21afb9dbd2eae7437dc01868010088736c
-
-
-### Create user
-POST {{deployedBaseUrl}}/api/users
-Content-Type: application/json
-
-{
-  "username": "demo-user",
-  "name": "Demo User",
-  "phoneNumber": "9000000001",
-  "password": "Example-password1!"
-}
-### Login
-POST {{deployedBaseUrl}}/api/login
-Content-Type: application/json
-
-{
-  "identifier": "demo-user",
-  "password": "Example-password1!"
-}
+@baseUrl = http://localhost:3001
 
 ### Get persons
-# Requires a JWT from POST /api/login. Without Authorization this endpoint should return:
-# HTTP/1.1 401 Unauthorized
-# {"error":"token missing"}
-GET {{deployedBaseUrl}}/api/persons
-Authorization: Bearer {{token}}
-
+GET {{baseUrl}}/api/persons
 
 ### Create person
-POST {{deployedBaseUrl}}/api/persons
+POST {{baseUrl}}/api/persons
 Content-Type: application/json
-Authorization: Bearer {{token}}
 
 {
   "name": "Grace Hopper",
   "number": "123-456789"
-}
-
-@baseUrl = https://phonebook-backend-a96k.onrender.com
-
-### Login
-POST {{baseUrl}}/api/login
-Content-Type: application/json
-
-{
-  "identifier": "demo-user",
-  "password": "Example-password1!"
 }

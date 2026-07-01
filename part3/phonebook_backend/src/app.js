@@ -2,7 +2,7 @@ const express = require('express')
 
 const cors = require('cors')
 const morgan = require('morgan')
-
+const path = require('path')
 const { getFrontendOrigins } = require('./config')
 const errorHandler = require('./middleware/errorHandler')
 const unknownEndpoint = require('./middleware/unknownEndpoint')
@@ -24,9 +24,9 @@ app.use(cors({
 app.use(express.json())
 app.use(morgan('tiny'))
 // Redirect the root URL to the public information page
-app.get('/', (request, response) => {
-  response.redirect('/info')
-})
+// app.get('/', (request, response) => {
+//   response.redirect('/info')
+// })
 
 app.get('/info', async (request, response, next) => {
   try {
@@ -44,6 +44,10 @@ app.get('/info', async (request, response, next) => {
 
 app.use('/persons', personsRouter)
 app.use('/api/persons', personsRouter)
+// Serve the React production build
+app.use(
+  express.static(path.join(__dirname, '../dist'))
+)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

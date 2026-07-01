@@ -42,7 +42,7 @@ app.get('/info', async (request, response, next) => {
   }
 })
 
-app.use('/persons', personsRouter)
+
 app.use('/api/persons', personsRouter)
 // Serve the React production build
 app.use(

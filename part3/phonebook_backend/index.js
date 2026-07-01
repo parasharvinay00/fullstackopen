@@ -37,7 +37,7 @@ const writePersons = async persons => {
   )
 }
 
-// Clean the submitted name and number
+// Clean the submitted person fields
 const normalizePerson = (body = {}) => ({
   name:
     typeof body.name === 'string'
@@ -47,6 +47,11 @@ const normalizePerson = (body = {}) => ({
   number:
     typeof body.number === 'string'
       ? body.number.trim()
+      : '',
+
+  address:
+    typeof body.address === 'string'
+      ? body.address.trim()
       : ''
 })
 
@@ -128,7 +133,8 @@ app.post('/api/persons', async (request, response, next) => {
     const newPerson = {
       id: randomUUID(),
       name: person.name,
-      number: person.number
+      number: person.number,
+      address: person.address
     }
 
     persons.push(newPerson)
@@ -179,7 +185,8 @@ app.put('/api/persons/:id', async (request, response, next) => {
     const updatedPerson = {
       ...existingPerson,
       name: person.name,
-      number: person.number
+      number: person.number,
+      address: person.address
     }
 
     const updatedPersons = persons.map(currentPerson =>

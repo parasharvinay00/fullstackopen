@@ -9,6 +9,7 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [newAddress, setNewAddress] = useState('')
   const [filterText, setFilterText] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
 
@@ -33,6 +34,7 @@ const App = () => {
 
     const trimmedName = newName.trim()
     const trimmedNumber = newNumber.trim()
+    const trimmedAddress = newAddress.trim()
 
     const existingPerson = persons.find(
       person => person.name.trim().toLowerCase() === trimmedName.toLowerCase()
@@ -40,7 +42,8 @@ const App = () => {
 
     const personObject = {
       name: trimmedName,
-      number: trimmedNumber
+      number: trimmedNumber,
+      address: trimmedAddress
     }
 
     if (existingPerson) {
@@ -51,7 +54,8 @@ const App = () => {
       if (confirmUpdate) {
         const changedPerson = {
           ...existingPerson,
-          number: trimmedNumber
+          number: trimmedNumber,
+          address: trimmedAddress
         }
 
         personService
@@ -67,6 +71,7 @@ const App = () => {
 
             setNewName('')
             setNewNumber('')
+            setNewAddress('')
           })
       }
 
@@ -84,6 +89,7 @@ const App = () => {
 
         setNewName('')
         setNewNumber('')
+        setNewAddress('')
       })
       .catch(error => {
         console.error('Create person failed:', {
@@ -140,8 +146,10 @@ const App = () => {
         addPerson={addPerson}
         newName={newName}
         newNumber={newNumber}
+        newAddress={newAddress}
         handleNameChange={(event) => setNewName(event.target.value)}
         handleNumberChange={(event) => setNewNumber(event.target.value)}
+        handleAddressChange={(event) => setNewAddress(event.target.value)}
       />
 
       <h3>Numbers</h3>

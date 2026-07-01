@@ -2,15 +2,16 @@ const express = require('express')
 const cors = require('cors')
 const fs = require('fs/promises')
 const path = require('path')
-const { randomUUID } = require('crypto')
+
 
 const app = express()
 const PORT = Number(process.env.PORT || 3001)
 const dbFile = path.join(__dirname, 'db.json')
+const distPath = path.join(__dirname, 'dist')
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static('dist'))
+app.use(express.static(distPath))
 
 const readPersons = async () => {
   try {
@@ -164,8 +165,12 @@ app.delete('/api/persons/:id', async (request, response, next) => {
   }
 })
 
-app.use((request, response) => {
+app.use('/api', (request, response) => {
   response.status(404).json({ error: 'unknown endpoint' })
+})
+
+app.get('*', (request, response) => {
+  response.sendFile(path.join(distPath, 'index.html'))
 })
 
 app.use((error, request, response, next) => {

@@ -9,8 +9,7 @@ const url = process.env.MONGODB_URI
 
 // Stop with a clear error if MONGODB_URI is missing.
 if (!url) {
-    console.error('MONGODB_URI is missing from the .env file')
-    process.exit(1)
+    console.error('MONGODB_URI environment variable is missing')
 }
 
 // Avoid printing the complete URL because it contains the password.

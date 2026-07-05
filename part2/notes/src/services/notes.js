@@ -8,6 +8,7 @@ const getAll = () => {
         id: 10000,
         content: 'This note is not saved to server',
         important: true,
+        likes: 0,
     }
     return request.then(response => response.data.concat(nonExisting))
 }

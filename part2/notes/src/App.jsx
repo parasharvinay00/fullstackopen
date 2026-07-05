@@ -86,6 +86,9 @@ const App = () => {
 
       // Randomly decide whether the new note is important or not.
       important: Math.random() > 0.5,
+
+      // Start each new note with zero likes.
+      likes: 0,
     }
 
     // Show the note object before sending it to the server.
@@ -216,6 +219,48 @@ const App = () => {
       })
   }
 
+  // Create a function that adds one like to a note.
+  const likeNote = id => {
+    // Find the note from the notes array using the given id.
+    const note = notes.find(n => n.id === id)
+
+    // Stop if the note was not found in the current state.
+    if (!note) {
+      setErrorMessage('Note was not found in the app state')
+
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+
+      return
+    }
+
+    // Create a copy of the note with one extra like.
+    const changedNote = {
+      ...note,
+      likes: (note.likes ?? 0) + 1,
+    }
+
+    // Send the updated note with the new like count to the backend server.
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(currentNotes =>
+          currentNotes.map(currentNote =>
+            currentNote.id === id ? returnedNote : currentNote
+          )
+        )
+      })
+      .catch(error => {
+        console.log('Liking note failed:', error)
+        setErrorMessage(`Failed to like note '${note.content}'`)
+
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
   // Decide which notes should be visible on the screen.
   const notesToShow = showAll
     // Show all notes when showAll is true.
@@ -265,6 +310,9 @@ const App = () => {
 
             // Pass a function that toggles this note's importance.
             toggleImportance={() => toggleImportanceOf(note.id)}
+
+            // Pass a function that adds one like to this note.
+            likeNote={() => likeNote(note.id)}
           />
         )}
       </ul>

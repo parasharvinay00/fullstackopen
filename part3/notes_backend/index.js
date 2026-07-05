@@ -1,86 +1,86 @@
 const express = require('express')
+const mongoose = require('mongoose')
+
 const app = express()
-const cors = require('cors')
 
-app.use(cors())
-let notes = [
-    {
-        id: '1',
-        content: 'HTML is easy',
-        important: true
-    },
-    {
-        id: '2',
-        content: 'Browser can execute only JavaScript',
-        important: false
-    }
-]
-
-// Allows Express to read JSON request bodies
+// Allows Express to read JSON data from request bodies.
 app.use(express.json())
 
-app.use(express.static('dist'))
+// Read the MongoDB password from the command line.
+const rawPassword = process.argv[2]
 
-app.get('/api/notes', (request, response) => {
-    response.json(notes)
-})
-
-const generateId = () => {
-    const maxId = notes.length > 0
-        ? Math.max(...notes.map(n => Number(n.id)))
-        : 0
-    return String(maxId + 1)
+// Stop the program when no password is supplied.
+if (!rawPassword) {
+    console.log('Give the MongoDB password as a command-line argument.')
+    console.log("Example: node --watch index.js 'yourPassword'")
+    process.exit(1)
 }
 
-app.post('/api/notes', (request, response) => {
-    const body = request.body
+// Encode special characters in the password before inserting it into the URL.
+const password = encodeURIComponent(rawPassword)
 
-    if (!body.content) {
-        return response.status(400).json({
-            error: 'content missing'
-        })
-    }
+// Replace YOUR_CLUSTER_ADDRESS with the address copied from MongoDB Atlas.
+const url =
+    `mongodb+srv://fullstack01:${password}` +
+    `@clusterm8.szjjuwm.mongodb.net/noteApp` +
+    `?retryWrites=true&w=majority&appName=Clusterm8`
 
-    const note = {
-        content: body.content,
-        important: body.important || false,
-        id: generateId(),
-    }
+mongoose.set('strictQuery', false)
 
-    notes = notes.concat(note)
-
-    response.json(note)
+// Define the structure of a note stored in MongoDB.
+const noteSchema = new mongoose.Schema({
+    content: String,
+    important: Boolean,
 })
 
-app.put('/api/notes/:id', (request, response) => {
-    const body = request.body
-    const { id } = request.params
-    const noteToUpdate = notes.find(note => note.id === id)
+// Change the format of notes before sending them as JSON.
+noteSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        // Convert MongoDB's ObjectId into a normal string called id.
+        returnedObject.id = returnedObject._id.toString()
 
-    if (!noteToUpdate) {
-        return response.status(404).json({
-            error: 'note not found'
-        })
-    }
-
-    if (!body.content) {
-        return response.status(400).json({
-            error: 'content missing'
-        })
-    }
-
-    const updatedNote = {
-        ...noteToUpdate,
-        content: body.content,
-        important: body.important ?? noteToUpdate.important,
-    }
-
-    notes = notes.map(note => note.id === id ? updatedNote : note)
-
-    response.json(updatedNote)
+        // Remove MongoDB and Mongoose internal fields.
+        delete returnedObject._id
+        delete returnedObject.__v
+    },
 })
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+// Create the Note model.
+const Note = mongoose.model('Note', noteSchema)
+
+// Test route.
+app.get('/', (request, response) => {
+    response.send('<h1>Hello World!</h1>')
 })
+
+// Retrieve every note from MongoDB.
+app.get('/api/notes', (request, response) => {
+    Note.find({})
+        .then(notes => {
+            response.json(notes)
+        })
+        .catch(error => {
+            console.error('Error retrieving notes:', error.message)
+
+            response.status(500).json({
+                error: 'Could not retrieve notes from the database',
+            })
+        })
+})
+
+const PORT = 3001
+
+// Connect to MongoDB before starting the Express server.
+mongoose
+    .connect(url, { family: 4 })
+    .then(() => {
+        console.log('Connected to MongoDB')
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`)
+        })
+    })
+    .catch(error => {
+        console.error('Error connecting to MongoDB:', error.message)
+        process.exit(1)
+    })

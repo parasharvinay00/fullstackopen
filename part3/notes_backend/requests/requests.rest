@@ -1,0 +1,21 @@
+GET http://localhost:3001/api/notes
+
+###
+GET http://localhost:3001/api/notes/6a468b0a86d6e2d376904229
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+  "content": "MongoDB is connected to the backend",
+  "important": true
+}
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+  "important": false
+}
